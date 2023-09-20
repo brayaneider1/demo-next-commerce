@@ -7,13 +7,13 @@ import { homeIllustration } from './home_illustration.styles';
 import IllustrationLight from '../../../public/images/home/illustration-eui-hero-500-shadow.svg';
 import IllustrationDark from '../../../public/images/home/illustration-eui-hero-500-darkmode-shadow.svg';
 
-const HomeIllustration: FunctionComponent = () => {
+const HomeIllustration: any = ({image}) => {
   const { colorMode } = useTheme();
   const { euiTheme } = useEuiTheme();
   const styles = homeIllustration(euiTheme);
 
   const Illustration =
-    colorMode === 'dark' ? IllustrationDark : IllustrationLight;
+    colorMode === 'dark' ? image : IllustrationLight;
 
   return (
     <div css={styles.homeIllustration}>

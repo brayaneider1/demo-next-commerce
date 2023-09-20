@@ -17,8 +17,12 @@ import { homeTemplates } from './home_templates.styles';
 import Pattern1 from '../../../public/images/patterns/pattern-1.svg';
 import Pattern2Light from '../../../public/images/patterns/pattern-2-light.svg';
 import Pattern2Dark from '../../../public/images/patterns/pattern-2-dark.svg';
+import commerce from '../../lib/commerce';
+const HomeTemplates: any = ({ products }) => {
+  const addToCart = id => {
+    commerce.cart.add(id, 1).then(response => alert('Producto agregado'));
+  };
 
-const HomeTemplates: FunctionComponent = () => {
   const { colorMode } = useTheme();
   const { euiTheme } = useEuiTheme();
 
@@ -52,67 +56,42 @@ const HomeTemplates: FunctionComponent = () => {
   return (
     <>
       <EuiTitle size="l">
-        <h2>Easy start with templates</h2>
+        <h2>Listado de productos</h2>
       </EuiTitle>
       <EuiSpacer size="m" />
       <EuiText>
         <p>
-          To help you get started we provide two templates with some
-          out-of-the-box patterns.
+          Aquí encontraras el listado de los productos disponibles en nuestra
+          tienda.
         </p>
       </EuiText>
 
       <EuiSpacer size="xxl" />
 
-      <EuiFlexGroup gutterSize="xl">
-        <EuiFlexItem>
-          <EuiPanel color="transparent" hasBorder css={styles.panel}>
-            {circles}
-            <div css={styles.panelInner}>
-              <EuiTitle size="s">
-                <h3>Kibana template</h3>
-              </EuiTitle>
-              <EuiSpacer size="s" />
-              <EuiText grow={false}>
-                <p>
-                  This template comes with a collapsible navbar and two stacked
-                  headers just like Kibana is today. On the top header, you can
-                  toggle the dark and light theme.
-                </p>
+      <EuiFlexGroup wrap gutterSize="xl">
+        {products?.map(item => (
+          <EuiFlexItem>
+            <EuiPanel color="transparent" hasBorder css={styles.panel}>
+              {circles}
+              <div css={styles.panelInner}>
+                <EuiTitle size="s">
+                  <h3>{item.name}</h3>
+                </EuiTitle>
+                <EuiSpacer size="s" />
+                <EuiText grow={false}>
+                  <p>{item.description}</p>
+                  <p>{item.price.formatted_with_symbol}</p>
 
-                <Link href="/kibana" passHref>
-                  <EuiButtonEmpty flush="both">
-                    <strong>Preview Kibana template</strong>
+                  <EuiButtonEmpty
+                    onClick={() => addToCart(item.id)}
+                    flush="both">
+                    <strong>Agregar al carrito</strong>
                   </EuiButtonEmpty>
-                </Link>
-              </EuiText>
-            </div>
-          </EuiPanel>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <EuiPanel color="transparent" hasBorder css={styles.panel}>
-            {circles}
-            <div css={styles.panelInner}>
-              <EuiTitle size="s">
-                <h3>Docs template</h3>
-              </EuiTitle>
-              <EuiSpacer size="s" />
-              <EuiText grow={false}>
-                <p>
-                  This template comes with a side nav and one header where you
-                  can toggle the dark and light theme. It has a similar layout
-                  as the EUI docs site or Elastic docs.
-                </p>
-
-                <Link href="/docs" passHref>
-                  <EuiButtonEmpty flush="both">
-                    <strong>Preview Docs template</strong>
-                  </EuiButtonEmpty>
-                </Link>
-              </EuiText>
-            </div>
-          </EuiPanel>
-        </EuiFlexItem>
+                </EuiText>
+              </div>
+            </EuiPanel>
+          </EuiFlexItem>
+        ))}
       </EuiFlexGroup>
     </>
   );

@@ -14,12 +14,13 @@ import {
   useGeneratedHtmlId,
   EuiAvatar,
   EuiThemeProvider,
+  EuiFlexGroup,
 } from '@elastic/eui';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import { css } from '@emotion/react';
 import ThemeSwitcher from '../components/chrome/theme_switcher';
-
+import commerce from '../lib/commerce';
 const pathPrefix = process.env.PATH_PREFIX;
 
 const TopLinks: EuiPinnableListGroupItemProps[] = [
@@ -41,6 +42,12 @@ const KibanaLinks: EuiPinnableListGroupItemProps[] = [
 
 const CollapsibleNav = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
+  const [ProductInCart, setProductInCart] = useState(null);
+
+  commerce.cart.retrieve().then(cart => {
+    console.log(cart);
+    setProductInCart(cart.line_items);
+  });
 
   const breadcrumbs = [
     {
@@ -125,7 +132,7 @@ const CollapsibleNav = () => {
     <EuiCollapsibleNav
       ownFocus={false}
       css={css`
-        margin-top: 96px; // two top navs
+        margin-top: 50px; // two top navs
         min-height: calc(100vh - 96px);
         display: flex;
       `}
@@ -150,7 +157,7 @@ const CollapsibleNav = () => {
               size="s"
               listItems={[
                 {
-                  label: 'Manage deployment',
+                  label: 'Carrito',
                   href: '#',
                   iconType: 'logoCloud',
                   iconProps: {
@@ -162,9 +169,8 @@ const CollapsibleNav = () => {
           </EuiThemeProvider>
         </EuiCollapsibleNavGroup>
       </EuiFlexItem>
-      {/* Shaded pinned section always with a home item */}
       <EuiFlexItem grow={false}>
-        <EuiCollapsibleNavGroup background="light">
+        {/*    <EuiCollapsibleNavGroup background="light">
           <EuiPinnableListGroup
             aria-label="Pinned links" // A11y : Since this group doesn't have a visible `title` it should be provided an accessible description
             listItems={alterLinksWithCurrentState(TopLinks).concat(
@@ -177,12 +183,12 @@ const CollapsibleNav = () => {
             gutterSize="none"
             size="s"
           />
-        </EuiCollapsibleNavGroup>
+        </EuiCollapsibleNavGroup> */}
       </EuiFlexItem>
       <EuiHorizontalRule margin="none" />
       {/* Menu items */}
       <EuiFlexItem className="eui-yScroll">
-        <EuiCollapsibleNavGroup
+        {/*      <EuiCollapsibleNavGroup
           title={
             <a
               className="eui-textInheritColor"
@@ -206,7 +212,25 @@ const CollapsibleNav = () => {
             gutterSize="none"
             size="s"
           />
-        </EuiCollapsibleNavGroup>
+        </EuiCollapsibleNavGroup> */}
+        {ProductInCart?.map(product => (
+          <div
+            css={css`
+              height: auto;
+              display: flex;
+              justify-content: space-between;
+              padding:10px;
+            `}
+            className="cart_item">
+            <img   css={css`
+              height: 30px;
+              display: flex;
+              justify-content: space-between;
+            `} src={product?.image?.url} />
+            <span>{product?.name}</span>
+            <span>{product?.quantity}</span>
+          </div>
+        ))}
       </EuiFlexItem>
     </EuiCollapsibleNav>
   );
@@ -215,7 +239,7 @@ const CollapsibleNav = () => {
 
   return (
     <>
-      <EuiHeader
+      {/*       <EuiHeader
         theme="dark"
         position="fixed"
         sections={[
@@ -242,7 +266,7 @@ const CollapsibleNav = () => {
             borders: 'none',
           },
         ]}
-      />
+      /> */}
 
       <EuiHeader
         position="fixed"
@@ -255,9 +279,7 @@ const CollapsibleNav = () => {
             items: [
               <EuiHeaderSectionItemButton
                 key={useGeneratedHtmlId()}
-                aria-label="Account menu">
-                <EuiAvatar type="space" name="Default Space" size="s" />
-              </EuiHeaderSectionItemButton>,
+                aria-label="Account menu"></EuiHeaderSectionItemButton>,
             ],
             breadcrumbs: breadcrumbs,
             borders: 'right',

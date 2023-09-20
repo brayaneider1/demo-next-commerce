@@ -12,6 +12,7 @@ import { imageLoader } from '../../lib/loader';
 import ThemeSwitcher from './theme_switcher';
 import { headerStyles } from './header.styles';
 import Logo from '../../../public/images/logo-eui.svg';
+import CollapsibleNav from '../../layouts/kibana_collapsible_nav';
 
 const Header = () => {
   const { euiTheme } = useEuiTheme();
@@ -45,9 +46,10 @@ const Header = () => {
         {
           items: [
             <ThemeSwitcher key="theme-switcher" />,
+            <CollapsibleNav />,
             <EuiToolTip content="Github" key="github">
               <EuiHeaderSectionItemButton aria-label={label} href={href}>
-                <EuiIcon type="logoGithub" aria-hidden="true" />
+                <EuiIcon type="logoCart" aria-hidden="true" />
               </EuiHeaderSectionItemButton>
             </EuiToolTip>,
           ],
